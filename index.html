@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Stock MktPlace — Dashboard</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #171a21;
+    --border: #262b36;
+    --text: #e6e9ef;
+    --muted: #8b92a3;
+    --ok: #2fbf71;
+    --error: #e5484d;
+    --na: #6b7280;
+    --accent: #5b8cff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    padding: 32px 24px 64px;
+  }
+  .header {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 13px;
+  }
+  .generado {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .conexiones {
+    max-width: 1200px;
+    margin: 0 auto 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .conex-vacio {
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .conex-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+  .conex-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .conex-ok .conex-dot {
+    background: var(--ok);
+    box-shadow: 0 0 0 3px rgba(47,191,113,0.18);
+    animation: pulso 2s ease-in-out infinite;
+  }
+  .conex-error .conex-dot {
+    background: var(--error);
+    box-shadow: 0 0 0 3px rgba(229,72,77,0.18);
+  }
+  @keyframes pulso {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  .conex-nombre {
+    font-weight: 600;
+  }
+  .conex-estado {
+    color: var(--muted);
+  }
+  .conex-ok .conex-estado { color: var(--ok); }
+  .conex-error .conex-estado { color: var(--error); }
+  .conex-fecha {
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: 2px;
+  }
+  .panel {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    text-align: left;
+    padding: 12px 14px;
+    background: #1c2029;
+    color: var(--muted);
+    font-weight: 500;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #1a1e27; }
+  td {
+    padding: 12px 14px;
+    vertical-align: top;
+  }
+  td.sku {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  td.nombre {
+    color: var(--muted);
+    max-width: 260px;
+  }
+  td.defontana {
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  td.c-ok, td.c-error, td.c-na, td.c-vacio {
+    white-space: nowrap;
+  }
+  .stock {
+    display: inline-block;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+  .stock-na { color: var(--muted); font-weight: 400; }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    padding: 2px 7px;
+    border-radius: 999px;
+  }
+  .c-ok .badge { background: rgba(47,191,113,0.15); color: var(--ok); }
+  .c-error .badge { background: rgba(229,72,77,0.15); color: var(--error); }
+  .c-na .badge { background: rgba(107,114,128,0.15); color: var(--na); }
+  .c-vacio .badge { background: rgba(107,114,128,0.1); color: var(--muted); }
+  .fecha {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+  }
+  .detalle {
+    display: block;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 2px;
+  }
+  .reserva {
+    color: var(--muted);
+    font-weight: 400;
+    font-size: 12px;
+  }
+  .vacio-total {
+    text-align: center;
+    color: var(--muted);
+    padding: 48px 24px;
+    font-size: 14px;
+  }
+  .leyenda {
+    max-width: 1200px;
+    margin: 16px auto 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+  <div class="header">
+    <div>
+      <h1>Stock MktPlace</h1>
+      <div class="subtitle">Pool de stock Defontana → Shopify / Falabella / Mercado Libre / Walmart</div>
+    </div>
+    <div class="generado">Generado 03/09/2026 09:54</div>
+  </div>
+  <div class="conexiones"><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Defontana</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 09:19</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Shopify</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 09:19</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Falabella</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 09:19</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Mercado Libre</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 09:19</span></div></div>
+  <div class="panel">
+    <table>
+      <thead>
+        <tr>
+          <th>SKU</th>
+          <th>Producto</th>
+          <th>Defontana</th>
+          <th>Shopify</th>
+          <th>Falabella</th>
+          <th>Mercado Libre</th>
+          <th>Walmart</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="sku">ACC-0074</td><td class="nombre">Reolink E321 – Cámara IP WiFi PTZ 3MP para Interior</td><td class="defontana">159 <span class="reserva">(pública 149, reserva -10)</span></td><td class="c-ok"><span class="stock">149</span><span class="badge">OK</span><span class="detalle">OK (C1=74 C2=75)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">149</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">149</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0075</td><td class="nombre">Reolink E331 – Cámara IP WiFi PTZ 5MP para Interior</td><td class="defontana">85 <span class="reserva">(pública 75, reserva -10)</span></td><td class="c-ok"><span class="stock">75</span><span class="badge">OK</span><span class="detalle">OK (C1=40 C2=35)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">75</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">75</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0076</td><td class="nombre">Cámara de seguridad para interiores, Reolink E1 Pro</td><td class="defontana">43 <span class="reserva">(pública 39, reserva -4)</span></td><td class="c-ok"><span class="stock">39</span><span class="badge">OK</span><span class="detalle">OK (C1=21 C2=18)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">39</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">39</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0077-2</td><td class="nombre">Cámara de seguridad para exteriores - TrackMix WiFi + Panel Solar</td><td class="defontana">6 <span class="reserva">(pública 5, reserva -1)</span></td><td class="c-ok"><span class="stock">5</span><span class="badge">OK</span><span class="detalle">OK (C1=5 C2=0)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">5</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">5</span><span class="badge">OK</span><span class="detalle">ACC-0077=2 OK | ACC-0077-2=3 OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0078</td><td class="nombre">Reolink Video Doorbell WiFi, 2K HD Día y Noche</td><td class="defontana">25 <span class="reserva">(pública 23, reserva -2)</span></td><td class="c-ok"><span class="stock">23</span><span class="badge">OK</span><span class="detalle">OK (C1=12 C2=11)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">23</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">23</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0079</td><td class="nombre">Home Hub Control centralizado para hasta 8 cámaras de seguridad Reolink</td><td class="defontana">12 <span class="reserva">(pública 11, reserva -1)</span></td><td class="c-ok"><span class="stock">11</span><span class="badge">OK</span><span class="detalle">OK (C1=6 C2=5)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">11</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">11</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0080-2</td><td class="nombre">Cámara solar WiFi de seguridad - Argus Eco Reolink + Panel Solar</td><td class="defontana">49 <span class="reserva">(pública 44, reserva -5)</span></td><td class="c-ok"><span class="stock">44</span><span class="badge">OK</span><span class="detalle">OK (C1=24 C2=20)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">44</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">44</span><span class="badge">OK</span><span class="detalle">ACC-0080=22 OK | ACC-0080-2=22 OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0081-2</td><td class="nombre">Camara de seguridad WiFi - Argus 3 Pro Reolink + Panel Solar</td><td class="defontana">53 <span class="reserva">(pública 43, reserva -10)</span></td><td class="c-ok"><span class="stock">43</span><span class="badge">OK</span><span class="detalle">OK (C1=23 C2=20)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">43</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">43</span><span class="badge">OK</span><span class="detalle">ACC-0081=21 OK | ACC-0081-2=22 OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0082-2</td><td class="nombre">Reolink Argus 3 Ultra 4K – Cámara de Seguridad + Panel Solar</td><td class="defontana">17 <span class="reserva">(pública 15, reserva -2)</span></td><td class="c-ok"><span class="stock">15</span><span class="badge">OK</span><span class="detalle">OK (C1=9 C2=6)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">15</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">15</span><span class="badge">OK</span><span class="detalle">ACC-0082=7 OK | ACC-0082-2=8 OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0083-2</td><td class="nombre">Cámara de seguridad solar 4k - Argus PT Ultra Reolink + Panel Solar</td><td class="defontana">0</td><td class="c-ok"><span class="stock">0</span><span class="badge">OK</span><span class="detalle">OK (C1=0 C2=0)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">0</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">0</span><span class="badge">OK</span><span class="detalle">ACC-0083=0 OK | ACC-0083-2=0 OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0084</td><td class="nombre">Panel Solar Reolink 6 W</td><td class="defontana">111 <span class="reserva">(pública 101, reserva -10)</span></td><td class="c-ok"><span class="stock">101</span><span class="badge">OK</span><span class="detalle">OK (C1=50 C2=51)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">101</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">101</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0088</td><td class="nombre">Telón Mural 60" | 122 cm x 92cm</td><td class="defontana">647 <span class="reserva">(pública 637, reserva -10)</span></td><td class="c-ok"><span class="stock">637</span><span class="badge">OK</span><span class="detalle">OK (C1=318 C2=319)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-error"><span class="stock stock-na">—</span><span class="badge">SKU no encontrado</span><span class="fecha">—</span></td><td class="c-ok"><span class="stock">637</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0089</td><td class="nombre">Telón Mural 100" | 200 cm x 150 cm</td><td class="defontana">441 <span class="reserva">(pública 431, reserva -10)</span></td><td class="c-ok"><span class="stock">431</span><span class="badge">OK</span><span class="detalle">OK (C1=185 C2=246)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">431</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">431</span><span class="badge">OK</span><span class="detalle">ACC-0089=215 OK | ACC-0089-2=216 OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0090</td><td class="nombre">Telón Mural 100" + Trípode | 200 cm x 150 cm</td><td class="defontana">386 <span class="reserva">(pública 376, reserva -10)</span></td><td class="c-ok"><span class="stock">376</span><span class="badge">OK</span><span class="detalle">OK (C1=188 C2=188)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">376</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">376</span><span class="badge">OK</span><span class="detalle">ACC-0090=188 OK | ACC-0090-2=188 OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">ACC-0091</td><td class="nombre">Telón Mural 100 | Eléctrico | 200 Cm X 150 Cm</td><td class="defontana">85 <span class="reserva">(pública 75, reserva -10)</span></td><td class="c-ok"><span class="stock">75</span><span class="badge">OK</span><span class="detalle">OK (C1=36 C2=39)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-error"><span class="stock stock-na">—</span><span class="badge">SKU no encontrado</span><span class="fecha">—</span></td><td class="c-ok"><span class="stock">75</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">IF-40FSB-TS</td><td class="nombre">Chimenea Eléctrica Empotrable - 40"</td><td class="defontana">21 <span class="reserva">(pública 19, reserva -2)</span></td><td class="c-ok"><span class="stock">19</span><span class="badge">OK</span><span class="detalle">OK (C1=0 C2=19)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">19</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">19</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">IF-50FSB-TS</td><td class="nombre">Chimenea Eléctrica Empotrable - 50"</td><td class="defontana">47 <span class="reserva">(pública 42, reserva -5)</span></td><td class="c-ok"><span class="stock">42</span><span class="badge">OK</span><span class="detalle">OK (C1=0 C2=42)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">42</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">42</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+<tr><td class="sku">IF-60FSB-TS</td><td class="nombre">Chimenea Eléctrica Empotrable - 60"</td><td class="defontana">15 <span class="reserva">(pública 13, reserva -2)</span></td><td class="c-ok"><span class="stock">13</span><span class="badge">OK</span><span class="detalle">OK (C1=0 C2=13)</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">13</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-ok"><span class="stock">13</span><span class="badge">OK</span><span class="fecha">03/09/2026 09:19</span></td><td class="c-na"><span class="stock stock-na">—</span><span class="badge">No automatizado</span><span class="fecha">—</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="leyenda">
+    "Defontana" es el stock fuente en Bodega Central (sumando familias con variante "-N" cuando corresponde).
+    El número publicado en cada canal ya descuenta la reserva de emergencia
+    (10% del total si tiene menos de 50 unidades,
+    10 unidades fijas si tiene 50 o más). Cuando Mercado Libre tiene 2 listados
+    para la misma familia, el total se reparte 50/50 entre ambos (detalle bajo el número).
+    La fecha bajo cada canal es la de su última actualización exitosa — no la de la última consulta.
+    Walmart no se escribe automáticamente (ver CLAUDE.md).
+  </div>
+</body>
+</html>
