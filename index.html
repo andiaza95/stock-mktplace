@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stock MktPlace — Dashboard</title>
 <style>
   :root {
@@ -15,6 +16,28 @@
     --na: #6b7280;
     --manual: #e0a52c;
     --accent: #5b8cff;
+    --ok-bg: rgba(47,191,113,0.15);
+    --error-bg: rgba(229,72,77,0.15);
+    --na-bg: rgba(107,114,128,0.15);
+    --manual-bg: rgba(224,165,44,0.15);
+    --vacio-bg: rgba(107,114,128,0.1);
+  }
+  [data-theme="light"] {
+    --bg: #f4f6f9;
+    --panel: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --muted: #64748b;
+    --ok: #15803d;
+    --error: #dc2626;
+    --na: #64748b;
+    --manual: #b45309;
+    --accent: #3f5fd0;
+    --ok-bg: #dcfce7;
+    --error-bg: #fee2e2;
+    --na-bg: #e2e8f0;
+    --manual-bg: #fef3c7;
+    --vacio-bg: #f1f5f9;
   }
   * { box-sizing: border-box; }
   body {
@@ -22,16 +45,16 @@
     background: var(--bg);
     color: var(--text);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    padding: 32px 24px 64px;
+    padding: 24px 16px 56px;
   }
   .header {
     max-width: 1200px;
     margin: 0 auto 24px;
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 10px;
   }
   h1 {
     font-size: 20px;
@@ -43,10 +66,21 @@
     color: var(--muted);
     font-size: 13px;
   }
-  .generado {
+  .theme-toggle {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 20px;
     color: var(--muted);
-    font-size: 12px;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all .2s;
+    font-weight: 500;
   }
+  .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
   .conexiones {
     max-width: 1200px;
     margin: 0 auto 20px;
@@ -106,10 +140,12 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 12px;
-    overflow: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
   table {
     width: 100%;
+    min-width: 720px;
     border-collapse: collapse;
     font-size: 13px;
   }
@@ -166,11 +202,11 @@
     padding: 2px 7px;
     border-radius: 999px;
   }
-  .c-ok .badge { background: rgba(47,191,113,0.15); color: var(--ok); }
-  .c-error .badge { background: rgba(229,72,77,0.15); color: var(--error); }
-  .c-na .badge { background: rgba(107,114,128,0.15); color: var(--na); }
-  .c-vacio .badge { background: rgba(107,114,128,0.1); color: var(--muted); }
-  .c-manual .badge { background: rgba(224,165,44,0.15); color: var(--manual); }
+  .c-ok .badge { background: var(--ok-bg); color: var(--ok); }
+  .c-error .badge { background: var(--error-bg); color: var(--error); }
+  .c-na .badge { background: var(--na-bg); color: var(--na); }
+  .c-vacio .badge { background: var(--vacio-bg); color: var(--muted); }
+  .c-manual .badge { background: var(--manual-bg); color: var(--manual); }
   .fecha {
     display: block;
     color: var(--muted);
@@ -200,6 +236,14 @@
     color: var(--muted);
     font-size: 12px;
   }
+  @media (max-width: 640px) {
+    body { padding: 16px 10px 48px; }
+    .header { align-items: flex-start; }
+    h1 { font-size: 17px; }
+    .subtitle { font-size: 12px; }
+    .conex-item { padding: 6px 10px; font-size: 11px; }
+    thead th, td { padding: 9px 10px; }
+  }
 </style>
 </head>
 <body>
@@ -208,7 +252,9 @@
       <h1>Stock MktPlace</h1>
       <div class="subtitle">Pool de stock Defontana → Shopify / Falabella / Mercado Libre / Walmart</div>
     </div>
-    <div class="generado">Generado 03/09/2026 11:41</div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+      <span id="themeIcon">&#9790;</span><span id="themeLabel">Modo Claro</span>
+    </button>
   </div>
   <div class="conexiones"><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Defontana</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Shopify</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Falabella</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Mercado Libre</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div></div>
   <div class="panel">
@@ -255,5 +301,26 @@
     La fecha bajo cada canal es la de su última actualización exitosa — no la de la última consulta.
     Walmart no se escribe automáticamente (ver CLAUDE.md).
   </div>
+  <script>
+    (function() {
+      var t = localStorage.getItem('smpTheme') || 'dark';
+      if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+    })();
+    function toggleTheme() {
+      var root = document.documentElement;
+      var cur = root.getAttribute('data-theme') || 'dark';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      if (next === 'light') root.setAttribute('data-theme', 'light');
+      else root.removeAttribute('data-theme');
+      localStorage.setItem('smpTheme', next);
+      document.getElementById('themeIcon').innerHTML = next === 'light' ? '&#9728;' : '&#9790;';
+      document.getElementById('themeLabel').textContent = next === 'light' ? 'Modo Oscuro' : 'Modo Claro';
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      var t = localStorage.getItem('smpTheme') || 'dark';
+      document.getElementById('themeIcon').innerHTML = t === 'light' ? '&#9728;' : '&#9790;';
+      document.getElementById('themeLabel').textContent = t === 'light' ? 'Modo Oscuro' : 'Modo Claro';
+    });
+  </script>
 </body>
 </html>
