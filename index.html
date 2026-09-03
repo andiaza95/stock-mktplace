@@ -81,6 +81,24 @@
     font-weight: 500;
   }
   .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .badge-mysql {
+    background: #1e3a1e;
+    border: 1px solid #22c55e;
+    color: #22c55e;
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    letter-spacing: .4px;
+  }
+  .badge-mysql-off {
+    background: var(--vacio-bg);
+    border-color: var(--border);
+    color: var(--muted);
+  }
+  [data-theme="light"] .badge-mysql { background: #dcfce7; }
+  [data-theme="light"] .badge-mysql-off { background: var(--vacio-bg); }
   .conexiones {
     max-width: 1200px;
     margin: 0 auto 20px;
@@ -252,9 +270,12 @@
       <h1>Stock MktPlace</h1>
       <div class="subtitle">Pool de stock Defontana → Shopify / Falabella / Mercado Libre / Walmart</div>
     </div>
-    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
-      <span id="themeIcon">&#9790;</span><span id="themeLabel">Modo Claro</span>
-    </button>
+    <div class="header-right">
+      <span class="badge-mysql badge-mysql-off">MySQL sin conexión</span>
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()">
+        <span id="themeIcon">&#9790;</span><span id="themeLabel">Modo Claro</span>
+      </button>
+    </div>
   </div>
   <div class="conexiones"><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Defontana</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Shopify</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Falabella</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div><div class="conex-item conex-ok"><span class="conex-dot"></span><span class="conex-nombre">Mercado Libre</span><span class="conex-estado">Conectado</span><span class="conex-fecha">03/09/2026 11:24</span></div></div>
   <div class="panel">
